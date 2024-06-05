@@ -21,7 +21,7 @@ const BlogList = () => {
             <Appbar />
 
             <div className="my-5 p-5 h-screen w-full flex flex-col justify-start items-center">
-                <div className="w-1/2 flex flex-col justify-center">
+                <div className="w-3/4 lg:w-1/2 flex flex-col justify-center">
                     <div className="flex flex-row justify-start">
                         <div className="p-2">+</div>
                         <div className="p-2 font-semibold">For you</div>
