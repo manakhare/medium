@@ -52,11 +52,12 @@ blogRouter.post('/', async (c) => {
             data: {
                 title: body.title,
                 content: body.content,
-                authorId: authId
+                authorId: authId,
+                date: body.date
             }
         })
 
-        return c.json({ id: blog.id })
+        return c.json({ id: blog.id, date: blog.date })
     } catch (e) {
         c.status(411);
         c.json({ message: "Incorrect inputs" })
@@ -89,11 +90,39 @@ blogRouter.put('/', async (c) => {
             }
         });
 
-        return c.json({ id: blog.id });
+        return c.json({ id: blog.id, date: blog.date });
 
     } catch (e) {
         c.status(411);
         return c.json({ message: "Incorrect inputs" })
+    }
+})
+
+
+
+blogRouter.get('/bulk', async (c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try {
+        const blogs = await prisma.post.findMany({
+            select: {
+                content: true,
+                title: true,
+                id: true,
+                date: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                }
+            }
+        });
+        return c.json({ blogs })
+    } catch (e) {
+        c.status(404);
+        return c.json({ message: "Blogs not found!" })
     }
 })
 
@@ -109,6 +138,17 @@ blogRouter.get('/:id', async (c) => {
         const blog = await prisma.post.findFirst({
             where: {
                 id: blogId
+            },
+            select: {
+                id: true,
+                title: true,
+                content: true,
+                date: true,
+                author: {
+                    select: {
+                        name: true
+                    }
+                }
             }
         })
         return c.json({ blog })
@@ -119,16 +159,3 @@ blogRouter.get('/:id', async (c) => {
 })
 
 
-blogRouter.get('/', async (c) => {
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL
-    }).$extends(withAccelerate());
-
-    try {
-        const blogs = await prisma.post.findMany();
-        return c.json({ blogs })
-    } catch (e) {
-        c.status(404);
-        return c.json({ message: "Blogs not found!" })
-    }
-})

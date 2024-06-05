@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
-import { decode, sign, verify } from 'hono/jwt'
+import { sign } from 'hono/jwt'
 import { Hono } from 'hono'
 import { signinInput, signupInput } from '@manakhare/common-module';
 
@@ -27,14 +27,17 @@ userRouter.post('/signup', async (c) => {
     try {
         const user = await prisma.user.create({
             data: {
+                name: body.name || '',
                 email: body.email,
                 password: body.password
             }
         })
 
+        console.log(user);
+
         const token = await sign({ id: user.id }, c.env.JWT_SECRET);
 
-        return c.json({ token })
+        return c.json({ token, user })
     } catch (e) {
         c.status(403);
         return c.json({ message: "Error while signing up" })
@@ -45,6 +48,7 @@ userRouter.post('/signin', async (c) => {
     const body = await c.req.json();
 
     const { success } = signinInput.safeParse(body);
+
     if (!success) {
         c.status(411);
         c.json({ message: "Incorrect inputs" })
@@ -54,10 +58,14 @@ userRouter.post('/signin', async (c) => {
         datasourceUrl: c.env.DATABASE_URL
     }).$extends(withAccelerate());
 
-
     const user = await prisma.user.findUnique({
         where: {
             email: body.email
+        },
+        select: {
+            name: true,
+            posts: true,
+            id: true
         }
     })
 
@@ -67,6 +75,8 @@ userRouter.post('/signin', async (c) => {
     }
 
     const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-    return c.json({ token })
+    return c.json({ token, user })
 })
+
+
 
