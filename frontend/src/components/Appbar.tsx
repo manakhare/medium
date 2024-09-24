@@ -57,7 +57,7 @@ const Appbar = memo(() => {
                             </button>
                         </Link>)}
                 </div>
-                <div className="lg:flex justify-center">
+                <div className="lg:flex justify-center pr-5">
                     <ProfileDropdown />
                 </div>
             </div>
