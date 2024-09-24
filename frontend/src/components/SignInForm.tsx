@@ -2,13 +2,11 @@ import { Link, useNavigate } from "react-router-dom"
 import Input from "./Input"
 import { useState } from "react"
 import { SigninInput } from "@manakhare/common-module"
-import axios, { AxiosError } from "axios"
+import axios from "axios"
 import { BACKEND_URL } from "../../config.ts"
 import { useSetRecoilState } from "recoil"
-// import { useRecoilState } from "recoil"
 import { isUserLoggedInAtom, userEmailAtom, userNameAtom } from "../recoil/atom/userDetailsAtom.ts"
 import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignInForm = () => {

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { SignupInput } from "@manakhare/common-module"
 import axios from "axios"
 import { BACKEND_URL } from "../../config.ts"
-import { useRecoilState, useSetRecoilState } from "recoil"
+import { useSetRecoilState } from "recoil"
 import { isUserLoggedInAtom, userEmailAtom, userNameAtom } from "../recoil/atom/userDetailsAtom.ts"
 
 const SignUpForm = () => {
