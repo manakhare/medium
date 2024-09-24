@@ -7,9 +7,19 @@ export interface BlogInterface {
     content: string;
     id: string;
     date: string;
+    published: boolean;
     author: {
         name: string;
+        email: string;
     }
+}
+
+export interface UserBlogInterface {
+    title: string;
+    id: string;
+    content: string;
+    published: boolean;
+    date: string;
 }
 
 export const useBlogs = () => {
@@ -27,12 +37,31 @@ export const useBlogs = () => {
         })
     }, [])
 
-
     return {
         loading, blogs
     }
 }
 
+export const useUserBlogs = () => {
+    const [loading, setLoading] = useState(true);
+    const [blogs, setBlogs] = useState<UserBlogInterface[]>();
+
+    useEffect(() => {
+
+        axios.get(`${BACKEND_URL}/api/v1/user/my-posts`, {
+            headers: {
+                Authorization: localStorage.getItem("token")
+            }
+        }).then(response => {
+            setBlogs(response.data.userBlogs[0].posts);
+            setLoading(false);
+        })
+    }, [])
+
+    return {
+        loading, blogs
+    }
+}
 
 export const useBlog = ({ id }: { id: string }) => {
     const [loading, setLoading] = useState(true);
@@ -53,3 +82,4 @@ export const useBlog = ({ id }: { id: string }) => {
         loading, blog
     }
 }
+

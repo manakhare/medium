@@ -7,9 +7,22 @@ export const userNameAtom = atom({
     }
 })
 
+
 export const isUserLoggedInAtom = atom({
     key: "isLoggedIn",
     default: {
         loggedIn: false
     }
+})
+
+// export const userEmailAtom = atom({
+//     key: "userEmail",
+//     default: {
+//         email: ""
+//     }
+// })
+
+export const userEmailAtom = atom({
+    key: "userEmail",
+    default: ""
 })

@@ -5,11 +5,12 @@ import { SignupInput } from "@manakhare/common-module"
 import axios from "axios"
 import { BACKEND_URL } from "../../config.ts"
 import { useRecoilState, useSetRecoilState } from "recoil"
-import { isUserLoggedInAtom, userNameAtom } from "../recoil/atom/userDetailsAtom.ts"
+import { isUserLoggedInAtom, userEmailAtom, userNameAtom } from "../recoil/atom/userDetailsAtom.ts"
 
 const SignUpForm = () => {
-    const [, setUsername] = useRecoilState(userNameAtom)
+    const setUserName = useSetRecoilState(userNameAtom)
     const setLoggedIn = useSetRecoilState(isUserLoggedInAtom);
+    const setUserEmail = useSetRecoilState(userEmailAtom);
 
     const navigate = useNavigate();
     const [userInput, setUserInput] = useState<SignupInput>({
@@ -23,8 +24,11 @@ const SignUpForm = () => {
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, userInput);
             const jwt = response.data.token;
             localStorage.setItem("token", jwt);
-            setUsername({ name: userInput.name || "Anonymous" });
+
+            setUserName({ name: userInput.name || "Anonymous" });
             setLoggedIn({ loggedIn: true })
+            setUserEmail(userInput.email)
+
             navigate('/blogs')
         } catch (e) {
             console.log(e);

@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom"
 import ProfileDropdown from "./ProfileDropdown"
 import Menu from "./Menu"
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { isUserLoggedInAtom } from "../recoil/atom/userDetailsAtom";
 
 
-const Appbar = () => {
+const Appbar = memo(() => {
     const [block, setBlock] = useState('block');
     const [hidden, setHidden] = useState('hidden');
 
@@ -86,6 +86,6 @@ const Appbar = () => {
             </div>
         </div >
     )
-}
+})
 
 export default Appbar

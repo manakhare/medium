@@ -2,14 +2,19 @@ import { Link, useNavigate } from "react-router-dom"
 import Input from "./Input"
 import { useState } from "react"
 import { SigninInput } from "@manakhare/common-module"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { BACKEND_URL } from "../../config.ts"
 import { useSetRecoilState } from "recoil"
-import { isUserLoggedInAtom } from "../recoil/atom/userDetailsAtom.ts"
+// import { useRecoilState } from "recoil"
+import { isUserLoggedInAtom, userEmailAtom, userNameAtom } from "../recoil/atom/userDetailsAtom.ts"
+import { toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 
 const SignInForm = () => {
     const setLoggedIn = useSetRecoilState(isUserLoggedInAtom)
+    const setUserEmail = useSetRecoilState(userEmailAtom);
+    const setUSerName = useSetRecoilState(userNameAtom);
 
     const navigate = useNavigate();
     const [userInput, setUserInput] = useState<SigninInput>({
@@ -21,11 +26,40 @@ const SignInForm = () => {
         try {
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, userInput);
             const jwt = response.data.token;
+            console.log(response);
+
+
             localStorage.setItem("token", jwt);
             setLoggedIn({ loggedIn: true });
-            navigate('/blogs')
-        } catch (e) {
+            setUserEmail(userInput.email);
+            setUSerName({ name: response.data.storedUser.name })
+
+            toast.success('Sign in successful!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            })
+
+            navigate('/blogs');
+
+        } catch (e: any) {
             console.log(e);
+
+            toast.error(e.response?.data.message, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'colored',
+            })
         }
 
     }
@@ -57,6 +91,8 @@ const SignInForm = () => {
                 {/* <Button buttonText={"Sign In"} onClick={sendSignInData}/> */}
                 <button onClick={sendSignInData} className="w-full p-2 my-3 text-lg bg-black rounded-lg text-slate-50 font-bold align-middle">Sign In</button>
             </div>
+
+
         </div>
     )
 }

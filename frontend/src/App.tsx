@@ -5,6 +5,7 @@ import Signin from './pages/Signin'
 import Blog from './pages/Blog'
 import BlogList from './pages/BlogList'
 import { CreatePost } from './pages/CreatePost'
+import { MyPosts } from './pages/MyPosts'
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
           <Route path='/blog/:id' element={<Blog />}></Route>
           <Route path='/blogs' element={<BlogList />}></Route>
           <Route path='/create' element={<CreatePost />}></Route>
+          <Route path='/my-posts' element={<MyPosts />}></Route>
         </Routes>
       </BrowserRouter>
 

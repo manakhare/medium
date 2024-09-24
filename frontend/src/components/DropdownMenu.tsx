@@ -17,6 +17,11 @@ const DropdownMenu = () => {
                     Logout
                 </Link>
             </div>
+            <div className="p-2 cursor-pointer rounded-lg hover:bg-slate-200">
+                <Link to='/my-posts'>
+                    My Posts
+                </Link>
+            </div>
         </div>
     )
 }

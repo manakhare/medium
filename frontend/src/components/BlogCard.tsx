@@ -35,7 +35,7 @@ const BlogCard = ({ authorName, title, content, publishedDate, id }: BlogCardPro
             <div className="p-2 my-8 min-w-full hover:cursor-pointer flex flex-col border-b border-slate-200">
                 <div className="flex flex-row py-1 my-1">
                     <div className="mr-3 flex justify-center w-6">
-                        <Avatar size={6} />
+                        <Avatar size={6} username={authorName || "Anonymous"} />
                     </div>
                     <div className="flex justify-center">
                         <div className="flex justify-center font-semibold mr-3">{authorName || "Anonymous"}</div>
