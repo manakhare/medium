@@ -1,5 +1,4 @@
-import { useRecoilValue } from "recoil";
-import { userNameAtom } from "../recoil/atom/userDetailsAtom";
+
 
 interface AvatarProps {
     size: number;
@@ -7,10 +6,7 @@ interface AvatarProps {
 }
 
 const Avatar = ({ size, username }: AvatarProps) => {
-    // const { name } = useRecoilValue(userNameAtom);
-    // console.log(name);
-
-
+  
     let width = `w-${size}`;
     let height = `h-${size}`;
 

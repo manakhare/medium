@@ -1,16 +1,11 @@
 import { Link } from "react-router-dom"
 import { isUserLoggedInAtom } from "../recoil/atom/userDetailsAtom";
 import { useSetRecoilState } from "recoil";
-import { useState } from "react";
 
 const DropdownMenu = () => {
-    const [login, setLogin] = useState(true);
     const setLoggedIn = useSetRecoilState(isUserLoggedInAtom)
 
     const logout = () => {
-        console.log("Logged out!");
-
-        setLogin(false);
         localStorage.removeItem("token");
         setLoggedIn({ loggedIn: false })
     }
