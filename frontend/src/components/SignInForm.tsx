@@ -7,7 +7,6 @@ import { BACKEND_URL } from "../../config.ts"
 import { useSetRecoilState } from "recoil"
 import { isUserLoggedInAtom, userEmailAtom, userNameAtom } from "../recoil/atom/userDetailsAtom.ts"
 import { toast } from 'react-toastify';
-import Loader from "./Loader.tsx"
 
 
 const SignInForm = () => {
@@ -70,7 +69,6 @@ const SignInForm = () => {
 
     return (
         <div className={loading ? "h-screen flex flex-col justify-center items-center cursor-wait" : "h-screen flex flex-col justify-center items-center"}>
-            {/* {loading ? <Loader /> :  */}
             
             <div className="w-fit py-5">
                 <div className="flex px-10  flex-col justify-center items-center">
@@ -105,7 +103,6 @@ const SignInForm = () => {
                         Sign In
                 </button>
             </div>
-            {/* } */}
 
 
         </div>
