@@ -7,9 +7,11 @@ import { BACKEND_URL } from "../../config.ts"
 import { useSetRecoilState } from "recoil"
 import { isUserLoggedInAtom, userEmailAtom, userNameAtom } from "../recoil/atom/userDetailsAtom.ts"
 import { toast } from 'react-toastify';
+import Loader from "./Loader.tsx"
 
 
 const SignInForm = () => {
+    const [loading, setLoading] = useState(false);
     const setLoggedIn = useSetRecoilState(isUserLoggedInAtom)
     const setUserEmail = useSetRecoilState(userEmailAtom);
     const setUSerName = useSetRecoilState(userNameAtom);
@@ -22,6 +24,7 @@ const SignInForm = () => {
 
     async function sendSignInData() {
         try {
+            setLoading(true)
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, userInput);
             const jwt = response.data.token;
             console.log(response);
@@ -32,6 +35,7 @@ const SignInForm = () => {
             setUserEmail(userInput.email);
             setUSerName({ name: response.data.storedUser.name })
 
+            
             toast.success('Sign in successful!', {
                 position: "top-right",
                 autoClose: 5000,
@@ -42,7 +46,8 @@ const SignInForm = () => {
                 progress: undefined,
                 theme: 'colored',
             })
-
+            
+            setLoading(false)
             navigate('/blogs');
 
         } catch (e: any) {
@@ -58,12 +63,15 @@ const SignInForm = () => {
                 progress: undefined,
                 theme: 'colored',
             })
+            setLoading(false)
         }
 
     }
 
     return (
-        <div className="h-screen flex flex-col justify-center items-center">
+        <div className={loading ? "h-screen flex flex-col justify-center items-center cursor-wait" : "h-screen flex flex-col justify-center items-center"}>
+            {/* {loading ? <Loader /> :  */}
+            
             <div className="w-fit py-5">
                 <div className="flex px-10  flex-col justify-center items-center">
                     <div className="text-4xl font-extrabold py-2">Login</div>
@@ -82,13 +90,22 @@ const SignInForm = () => {
                 }} />
                 <Input label={"Password"} type={"password"} placeholder={"******"} onChange={(e) => {
                     setUserInput(c => ({
-                        ...c,
+                        ...c,   
                         password: e.target.value
                     }))
                 }} />
                 {/* <Button buttonText={"Sign In"} onClick={sendSignInData}/> */}
-                <button onClick={sendSignInData} className="w-full p-2 my-3 text-lg bg-black rounded-lg text-slate-50 font-bold align-middle">Sign In</button>
+                <button
+                    disabled={loading ? true: false}
+                    onClick={sendSignInData} 
+                    className={loading ? 
+                                "w-full p-2 my-3 text-lg bg-black rounded-lg text-slate-50 font-bold align-middle cursor-not-allowed" 
+                                :
+                                "w-full p-2 my-3 text-lg bg-black rounded-lg text-slate-50 font-bold align-middle cursor-pointer"}>
+                        Sign In
+                </button>
             </div>
+            {/* } */}
 
 
         </div>

@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom"
 import { useRecoilValue } from "recoil"
 import { editBlogAtom } from "../recoil/atom/blogDetailsAtom"
 
-
 export const CreatePost = () => {
+    const [loading, setLoading] = useState(false)
     const navigate = useNavigate();
     const useBlogValue = useRecoilValue(editBlogAtom)
 
@@ -17,6 +17,7 @@ export const CreatePost = () => {
     })
 
     const sendBlogData = async () => {
+        setLoading(true)
         const date = new Date();
 
         const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
@@ -30,8 +31,10 @@ export const CreatePost = () => {
         })
 
         const id = response.data.id;
+        setLoading(false);
         navigate(`/blog/${id}`);
     }
+
 
     return (
         <div className="h-screen w-screen relative z-0">
@@ -39,7 +42,10 @@ export const CreatePost = () => {
                 <Appbar />
             </div>
 
-            <div className="px-10 flex flex-col justify-center items-center w-full">
+            <div className={loading ? 
+                    "px-10 flex flex-col justify-center items-center w-full cursor-wait"
+                    : 
+                    "px-10 flex flex-col justify-center items-center w-full"}>
                 <div className="max-w-screen-lg w-full flex flex-col items-center justify-center">
 
                     <div className="my-6 w-full font-semibold text-2xl flex justify-start items-start">
@@ -65,12 +71,19 @@ export const CreatePost = () => {
                     </div>
 
                     <div className="mt-6 w-full">
-                        <button onClick={sendBlogData} className="w-full py-3 bg-blue-600  text-slate-50 rounded-lg cursor-pointer text-lg font-bold hover:bg-blue-500">
+                        <button 
+                            disabled={loading ? true : false}
+                            onClick={sendBlogData} 
+                            className={loading ?
+                                "w-full py-3 bg-blue-600  text-slate-50 rounded-lg cursor-not-allowed text-lg font-bold hover:bg-blue-500"
+                                : 
+                                "w-full py-3 bg-blue-600  text-slate-50 rounded-lg cursor-pointer text-lg font-bold hover:bg-blue-500"}>
                             Post
                         </button>
                     </div>
                 </div>
             </div>
+
         </div>
     )
 }

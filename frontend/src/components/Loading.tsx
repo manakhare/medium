@@ -13,7 +13,6 @@ export const Loading = () => {
                         <div className="h-2 bg-gray-200 rounded-full w-full mb-2.5"></div>
                     </div>
                 </div>
-
             </div>
         </div>
     )

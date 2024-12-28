@@ -67,7 +67,8 @@ const Blog = () => {
                 <Avatar size={10} username={blog.author.name || "Anonymous"} /></div>
               <div>
                 <div className="font-bold text-2xl">{blog.author.name || "Anonymous"}</div>
-                <div className="py-3 text-slate-400">Master of mirth, purveyor of puns, and the funniest person in the kingdom.</div>
+                {/* Description of the author */}
+                <div className="py-3 text-slate-400"></div>
               </div>
             </div>
           </div>
