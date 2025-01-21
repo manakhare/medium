@@ -11,6 +11,7 @@ export interface BlogInterface {
     author: {
         name: string;
         email: string;
+        description: string;
     }
 }
 

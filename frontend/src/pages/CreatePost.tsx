@@ -62,11 +62,7 @@ export const CreatePost = () => {
             })
         }
     }
-
-    const getPlainText = () => {
-        
-    }
-
+    
 
     return (
         <div className="h-screen w-screen relative z-0">
