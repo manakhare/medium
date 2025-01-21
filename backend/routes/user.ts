@@ -4,6 +4,7 @@ import { sign, verify } from 'hono/jwt'
 import { Hono } from 'hono'
 import { signinInput, signupInput } from '@manakhare/common-module';
 import bcrypt from "bcryptjs";
+import { isRejected } from '@reduxjs/toolkit';
 
 
 export const userRouter = new Hono<{
@@ -13,6 +14,7 @@ export const userRouter = new Hono<{
         SALT_ROUNDS: number;
     }
 }>()
+
 
 userRouter.post('/signup', async (c) => {
     const body = await c.req.json();
@@ -42,14 +44,16 @@ userRouter.post('/signup', async (c) => {
 
         const hashedPassword = await bcrypt.hash(body.password, c.env.SALT_ROUNDS);
 
-
         const user = await prisma.user.create({
             data: {
                 name: body.name || '',
                 email: body.email,
-                password: hashedPassword
+                password: hashedPassword,
+                description: ""
             }
         })
+
+       
 
         // console.log(user, 'user');
 
@@ -63,7 +67,8 @@ userRouter.post('/signup', async (c) => {
             token, user: {
                 id: user.id,
                 email: user.email,
-                name: user.name
+                name: user.name,
+                description: user.description
             }
         })
     } catch (e) {
@@ -74,13 +79,14 @@ userRouter.post('/signup', async (c) => {
 })
 
 
-
 userRouter.post('/signin', async (c) => {
     const body = await c.req.json();
-
+    console.log(body);
+    
     const { success } = signinInput.safeParse(body);
-
+    
     if (!success) {
+        console.log("Here");
         c.status(411);
         c.json({ message: "Incorrect inputs" })
     }
@@ -98,9 +104,12 @@ userRouter.post('/signin', async (c) => {
                 name: true,
                 email: true,
                 id: true,
-                password: true
+                password: true,
+                description: true
             }
         })
+
+        console.log(storedUser);
 
         if(!storedUser) throw new Error();
 
@@ -118,7 +127,8 @@ userRouter.post('/signin', async (c) => {
             storedUser: {
                 id: storedUser?.id,
                 email: storedUser?.email,
-                name: storedUser?.name
+                name: storedUser?.name,
+                description: storedUser?.description
             },
             message: 'Sign in successful!'
         })
@@ -129,32 +139,10 @@ userRouter.post('/signin', async (c) => {
         // }
     }
 
-
-
-
-    // const user = await prisma.user.findUnique({
-    //     where: {
-    //         email: body.email,
-    //         password: 
-    //     }
-    // })
-
-    // if (!user) {
-    //     c.status(403);
-    //     return c.json({ message: "No such user exists. Please sign up!" })
-    // }
-
-    // verifying password
-    // if (user.password !== body.password) {
-    //     c.status(401);
-    //     return c.json({ message: 'Passwords do not match! Authentication failed' })
-    // }
-
-
 })
 
 
-userRouter.get('/my-posts', async (c) => {
+userRouter.get('/my-posts-desc', async (c) => {
     const jwt = c.req.header("Authorization");
 
     if (!jwt) {
@@ -207,6 +195,148 @@ userRouter.get('/my-posts', async (c) => {
         return c.json({ message: "Couldn't find posts" })
     }
 
+})
+
+
+userRouter.get('/my-posts-asc', async (c) => {
+    const jwt = c.req.header("Authorization");
+
+    if (!jwt) {
+        c.status(401);
+        return c.json({ message: "Unauthorized access" })
+    }
+
+    const user = await verify(jwt, c.env.JWT_SECRET);
+
+    if (!user) {
+        c.status(401);
+        return c.json({ message: "No such user exists!" })
+    }
+
+    const userId = user.id;
+
+
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try {
+        const userBlogs = await prisma.user.findMany({
+            where: {
+                id: userId || "",
+            },
+            include: {
+                posts: {
+                    orderBy: {
+                        date: 'asc'
+                    }
+                }
+            }
+        })
+
+        return c.json({ userBlogs })
+    }
+    catch (err) {
+        c.status(502);
+        return c.json({ message: "Couldn't find posts" })
+    }
+
+})
+
+
+userRouter.post('/profile', async (c) => {
+    const jwt = c.req.header("Authorization");
+    const body = await c.req.json();
+
+    if (!jwt) {
+        c.status(401);
+        return c.json({ message: "Unauthorized access" })
+    }
+
+    const user = await verify(jwt, c.env.JWT_SECRET);
+
+    if (!user) {
+        c.status(401);
+        return c.json({ message: "No such user exists!" })
+    }
+
+    const userId = user.id;
+
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try {
+        const updateProfile = await prisma.user.update({
+            where: {
+                id: userId as string || ""
+            },
+            data: {
+                description: body.description,
+                name: body.name,
+            }
+        })
+
+        c.status(200);
+        return c.json({ message: "Profile updated successfully" })
+    } catch (error) {
+        console.log(error);
+        c.status(400);
+        return c.json({message: "Couldn't update profile details!"})
+    }
+})
+
+
+userRouter.get('/profile', async (c) => {
+    const jwt = c.req.header("Authorization");
+    // const body = await c.req.json();
+
+    if (!jwt) {
+        c.status(401);
+        return c.json({ message: "Unauthorized access" })
+    }
+
+    const user = await verify(jwt, c.env.JWT_SECRET);
+
+    if (!user) {
+        c.status(401);
+        return c.json({ message: "No such user exists!" })
+    }
+
+    const userId = user.id;
+
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try {
+        const data = await prisma.user.findFirst({
+            where: {
+                id: userId || ""
+            },
+            select: {
+                name: true,
+                // email: true,
+                description: true
+            }
+        })
+
+        if(!data) {
+            c.status(404);
+            return c.json({ message: "Profile not found" });
+        }
+
+        console.log(data);
+        
+
+        c.status(200);
+        return c.json({profile: data})
+        
+    } catch (error) {
+        console.log(error);
+        c.status(400);
+        return c.json({ message: "Cannot find profile details!"})
+    }
 })
 
 

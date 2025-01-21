@@ -1,16 +1,16 @@
-import { useRecoilValue } from "recoil"
-import { userNameAtom } from "../recoil/atom/userDetailsAtom"
+// import { useRecoilValue } from "recoil"
+// import { userNameAtom } from "../recoil/atom/userDetailsAtom"
 import DropdownMenu from "./DropdownMenu";
 import { useState } from "react";
 import { memo } from "react";
 
 const ProfileDropdown = memo(() => {
-    const { name } = useRecoilValue(userNameAtom);
+    // const { name } = useRecoilValue(userNameAtom);
+    const details = JSON.parse(localStorage.getItem("user") || "Anonymous")
+    const name = details!=="Anonymous" ? details?.name : "Anonymous"
     const [block, setBlock] = useState('hidden')
 
     console.log(name);
-
-
 
     const onProfileHover = () => {
         if (block === 'hidden') {

@@ -25,7 +25,7 @@ const BlogList = () => {
                     <div className="flex flex-row justify-start">
                         <div className="p-2">+</div>
                         <div className="p-2 font-semibold">For you</div>
-                        <div className="p-2">Following</div>
+                        {/* <div className="p-2">Following</div> */}
                     </div>
                     <div>
                         {blogs ? blogs.map((blog) => (

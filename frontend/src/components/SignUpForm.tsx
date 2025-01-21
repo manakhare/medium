@@ -28,6 +28,7 @@ const SignUpForm = () => {
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, userInput);
             const jwt = response.data.token;
             localStorage.setItem("token", jwt);
+            localStorage.setItem("user", response.data.user);
 
             setUserName({ name: userInput.name || "Anonymous" });
             setLoggedIn({ loggedIn: true })

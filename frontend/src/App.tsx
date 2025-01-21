@@ -6,6 +6,7 @@ import Blog from './pages/Blog'
 import BlogList from './pages/BlogList'
 import { CreatePost } from './pages/CreatePost'
 import { MyPosts } from './pages/MyPosts'
+import Profile from './pages/Profile'
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
           <Route path='/blogs' element={<BlogList />}></Route>
           <Route path='/create' element={<CreatePost />}></Route>
           <Route path='/my-posts' element={<MyPosts />}></Route>
+          <Route path='/profile' element={<Profile />}></Route>
         </Routes>
       </BrowserRouter>
 

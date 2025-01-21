@@ -26,10 +26,13 @@ const SignInForm = () => {
             setLoading(true)
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, userInput);
             const jwt = response.data.token;
+            console.log(response.data);
+            
             console.log(response);
 
 
             localStorage.setItem("token", jwt);
+            localStorage.setItem("user", JSON.stringify(response.data.storedUser))
             setLoggedIn({ loggedIn: true });
             setUserEmail(userInput.email);
             setUSerName({ name: response.data.storedUser.name })
@@ -52,7 +55,7 @@ const SignInForm = () => {
         } catch (e: any) {
             console.log(e);
 
-            toast.error(e.response?.data.message, {
+            toast.error("Something went wrong. Please try again!", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,

@@ -17,7 +17,6 @@ export const blogRouter = new Hono<{
 }>()
 
 
-
 blogRouter.use('/*', async (c, next) => {
     const jwt = c.req.header("Authorization");
 
@@ -209,7 +208,8 @@ blogRouter.get('/:id', async (c) => {
                 author: {
                     select: {
                         name: true,
-                        email: true
+                        email: true,
+                        description: true
                     }
                 }
             }

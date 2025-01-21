@@ -42,7 +42,7 @@ const Blog = () => {
           <div className="">
             <div className="font-extrabold text-5xl p-4">{blog.title}</div>
             <div className="px-4 text-slate-400">Posted on {formattedDate}</div>
-            <div className="p-4 tracking-wide text-md text-slate-800">{blog.content}</div>
+            <div className="p-4 tracking-wide text-md text-slate-800" dangerouslySetInnerHTML={{__html: blog.content}}></div>
             {email === blog.author.email ?
               <Link to={'/create'}>
                 <button
@@ -60,17 +60,24 @@ const Blog = () => {
         </div>
 
         <div className="grid col-span-12 lg:col-span-4 py-4 justify-content-start lg:px-2">
+
           <div className="ml-4 lg:w-full">
+
             <div className="pt-6 text-lg text-slate-600">Author</div>
+
             <div className="flex flex-row justify-start items-center gap-4 mt-5">
+
               <div className="flex w-10 h-10 flex-col justify-center items-center mr-2 px-5">
-                <Avatar size={10} username={blog.author.name || "Anonymous"} /></div>
-              <div>
-                <div className="font-bold text-2xl">{blog.author.name || "Anonymous"}</div>
-                {/* Description of the author */}
-                <div className="py-3 text-slate-400"></div>
+                <Avatar size={10} username={blog.author.name || "Anonymous"} />
               </div>
+              
+              <div className="font-bold text-2xl">{blog.author.name || "Anonymous"}</div>
+
             </div>
+              <div className="flex items-center justify-start">
+                {/* Description of the author */}
+                <div className="py-3 text-slate-400">{blog.author.description}</div>
+              </div>
           </div>
         </div>
       </div>

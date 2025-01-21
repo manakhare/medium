@@ -45,7 +45,7 @@ const BlogCard = ({ authorName, title, content, publishedDate, id }: BlogCardPro
 
                 <div className="py-2">
                     <div className="font-bold text-xl">{title}</div>
-                    <div className="text-slate-500 pt-1 font-serif">{content.length > 130 ? content.slice(0, 130) + "..." : content}</div>
+                    <div className="text-slate-500 pt-1 font-serif" dangerouslySetInnerHTML={{__html: content.length > 130 ? content.slice(0, 130) + "..." : content}}></div>
                 </div>
 
                 <div className="py-2 text-slate-700 font-thin text-sm">{`${Math.ceil(content.length / 200)} min read`}</div>

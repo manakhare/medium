@@ -5,9 +5,8 @@ interface AvatarProps {
     username: string;
 }
 
-const Avatar = ({ size, username }: AvatarProps) => {
-  
-    let width = `w-${size}`;
+const Avatar = ({ size, username }: AvatarProps) => { 
+    let width = `w-${size}`;    
     let height = `h-${size}`;
 
     return (
