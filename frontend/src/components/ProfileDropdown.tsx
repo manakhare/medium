@@ -10,7 +10,7 @@ const ProfileDropdown = memo(() => {
     const name = details!=="Anonymous" ? details?.name : "Anonymous"
     const [block, setBlock] = useState('hidden')
 
-    console.log(name);
+    // console.log(name);
 
     const onProfileHover = () => {
         if (block === 'hidden') {

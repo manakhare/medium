@@ -49,7 +49,7 @@ export const useUserBlogs = () => {
 
     useEffect(() => {
 
-        axios.get(`${BACKEND_URL}/api/v1/user/my-posts`, {
+        axios.get(`${BACKEND_URL}/api/v1/user/my-posts-desc`, {
             headers: {
                 Authorization: localStorage.getItem("token")
             }

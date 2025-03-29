@@ -31,6 +31,12 @@ const Menu = ({ switchCrossSign, hidden }: {
                     <Link to={'/create'}>New Post</Link>
                 </div>
                 <div className="flex items-center justify-center py-3 mt-2 px-20 w-2/3 rounded-full text-lg cursor-pointer bg-gray-100 hover:bg-gray-200">
+                    <Link to={'/my-posts'}>My Posts</Link>
+                </div>
+                <div className="flex items-center justify-center py-3 mt-2 px-20 w-2/3 rounded-full text-lg cursor-pointer bg-gray-100 hover:bg-gray-200">
+                    <Link to={'/profile'}>My Profile</Link>
+                </div>
+                <div className="flex items-center justify-center py-3 mt-2 px-20 w-2/3 rounded-full text-lg cursor-pointer bg-gray-100 hover:bg-gray-200">
                     <Link to={'/signin'}>Logout</Link>
                 </div>
             </div>
