@@ -280,7 +280,7 @@ userRouter.post('/profile', async (c) => {
         c.status(200);
         return c.json({ message: "Profile updated successfully" })
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         c.status(400);
         return c.json({message: "Couldn't update profile details!"})
     }
@@ -326,14 +326,14 @@ userRouter.get('/profile', async (c) => {
             return c.json({ message: "Profile not found" });
         }
 
-        console.log(data);
+        // console.log(data);
         
 
         c.status(200);
         return c.json({profile: data})
         
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         c.status(400);
         return c.json({ message: "Cannot find profile details!"})
     }
