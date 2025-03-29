@@ -69,10 +69,11 @@ userRouter.post('/signup', async (c) => {
                 email: user.email,
                 name: user.name,
                 description: user.description
-            }
+            }, 
+            message: "Sign up successful!"
         })
     } catch (e) {
-        // console.log(e);
+        console.log(e);
         c.status(403);
         return c.json({ message: "Error while signing up" })
     }

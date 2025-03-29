@@ -4,7 +4,7 @@ import { Loading } from "../components/Loading";
 import { useBlogs } from "../hooks"
 
 const BlogList = () => {
-    const { loading, blogs } = useBlogs();
+    const { loading, blogs } = useBlogs();    
 
     if (loading) {
         return <div className="w-full flex flex-col items-center justify-center">
@@ -37,7 +37,7 @@ const BlogList = () => {
                                 content={blog.content}
                                 publishedDate={blog.date}
                             />))
-                            : null}
+                            : <div className="w-full flex flex-col items-center justify-center">No content</div>}
                     </div>
                 </div>
             </div>

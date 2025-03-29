@@ -28,7 +28,7 @@ const SignUpForm = () => {
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, userInput);
             const jwt = response.data.token;
             localStorage.setItem("token", jwt);
-            localStorage.setItem("user", response.data.user);
+            localStorage.setItem("user", JSON.stringify(response.data.user));
 
             setUserName({ name: userInput.name || "Anonymous" });
             setLoggedIn({ loggedIn: true })
@@ -66,9 +66,9 @@ const SignUpForm = () => {
     return (
         <div className="h-screen flex flex-col justify-center items-center">
             {loading ? <Loader /> :
-                <div className="w-fit py-5">
-                    <div className="flex px-10  flex-col justify-center items-center">
-                        <div className="text-4xl font-extrabold py-2">Create an account</div>
+                <div className="w-fit py-5 px-5">
+                    <div className="flex px-10  flex flex-col justify-center items-center">
+                        <div className="text-4xl font-extrabold py-2 flex justify-center items-center text-center">Create an account</div>
                         <div className="text-lg text-slate-500 mb-5">
                             Already have an account?{' '}
                             <Link to={'/signin'} className="underline underline-offset-2 cursor-pointer">
