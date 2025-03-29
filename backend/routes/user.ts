@@ -81,12 +81,12 @@ userRouter.post('/signup', async (c) => {
 
 userRouter.post('/signin', async (c) => {
     const body = await c.req.json();
-    console.log(body);
+    // console.log(body);
     
     const { success } = signinInput.safeParse(body);
     
     if (!success) {
-        console.log("Here");
+        // console.log("Here");
         c.status(411);
         c.json({ message: "Incorrect inputs" })
     }
@@ -109,7 +109,7 @@ userRouter.post('/signin', async (c) => {
             }
         })
 
-        console.log(storedUser);
+        // console.log(storedUser);
 
         if(!storedUser) throw new Error();
 

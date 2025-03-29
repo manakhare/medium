@@ -48,7 +48,7 @@ const SignUpForm = () => {
 
             navigate('/blogs')
         } catch (e: any) {
-            console.log(e);
+            // console.log(e);
             toast.error(e.response?.data.message, {
                 position: "top-right",
                 autoClose: 5000,

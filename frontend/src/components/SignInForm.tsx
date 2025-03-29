@@ -26,9 +26,9 @@ const SignInForm = () => {
             setLoading(true)
             const response = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, userInput);
             const jwt = response.data.token;
-            console.log(response.data);
+            // console.log(response.data);
             
-            console.log(response);
+            // console.log(response);
 
 
             localStorage.setItem("token", jwt);
@@ -53,7 +53,7 @@ const SignInForm = () => {
             navigate('/blogs');
 
         } catch (e: any) {
-            console.log(e);
+            // console.log(e);
 
             toast.error("Something went wrong. Please try again!", {
                 position: "top-right",

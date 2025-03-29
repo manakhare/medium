@@ -71,16 +71,16 @@ const Profile = () => {
             Authorization: localStorage.getItem("token")
           }
         });
-        console.log(res.data);
+        // console.log(res.data);
         
         const profileData = res.data.profile;
-        console.log(profileData);
+        // console.log(profileData);
 
         setUsername(profileData.name);
         // setEmail(profileData.email);
         setDescription(profileData.description);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         toast.error("Unable to fetch profile details!")
       }
     }
