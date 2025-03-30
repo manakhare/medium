@@ -2,22 +2,42 @@ import Appbar from "../components/Appbar";
 import Avatar from "../components/Avatar";
 import { useBlog } from "../hooks"
 import { Loading } from "../components/Loading";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { month } from "../constants";
-import { userEmailAtom } from "../recoil/atom/userDetailsAtom";
-import { useRecoilValue } from "recoil";
+// import { userEmailAtom } from "../recoil/atom/userDetailsAtom";
+// import { useRecoilValue } from "recoil";
 import { useSetRecoilState } from "recoil";
 import { editBlogAtom } from "../recoil/atom/blogDetailsAtom";
 
 
 const Blog = () => {
-  const email = useRecoilValue(userEmailAtom);
+  // const email = useRecoilValue(userEmailAtom);
+  const navigate = useNavigate();
+  const user = localStorage.getItem("user") || "";
   const setBlogDetails = useSetRecoilState(editBlogAtom)
+  const email = JSON.parse(user).email || "Anonymous"
+
 
   const { id } = useParams();
   const { loading, blog } = useBlog({ id: id || "" })
+  console.log(blog);
+  
 
-
+  const onDelete = async () => {
+    try {
+      const res = await fetch(`http://localhost:8787/api/v1/blog/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: localStorage.getItem("token") || ""
+        }
+      })
+      if (res.status === 200) {
+        navigate("/blogs");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
   if (loading || !blog) {
     return <div className="w-full flex flex-col items-center justify-center">
       <div className="w-3/4 flex flex-col items-center justify-center"><Loading /></div>
@@ -42,20 +62,31 @@ const Blog = () => {
           <div className="">
             <div className="font-extrabold text-5xl p-4">{blog.title}</div>
             <div className="px-4 text-slate-400">Posted on {formattedDate}</div>
-            <div className="p-4 tracking-wide text-md text-slate-800" dangerouslySetInnerHTML={{__html: blog.content}}></div>
+            <div className="p-4 tracking-wide text-md text-slate-800" dangerouslySetInnerHTML={{ __html: blog.content }}></div>
             {email === blog.author.email ?
-              <Link to={'/create'}>
-                <button
-                  onClick={() => {
-                    setBlogDetails({
-                      title: blog.title,
-                      content: blog.content
-                    })
-                  }}
-                  className="mt-5 py-2 px-8 text-white font-bold text-md bg-green-700 hover:bg-green-600 border rounded-full">
-                  Edit Post
-                </button>
-              </Link> : null}
+              <div className="flex flex-row justify-start items-center gap-4 mt-5">
+                <Link to={'/edit'}>
+                  <button
+                    onClick={() => {
+                      setBlogDetails({
+                        title: blog.title,
+                        content: blog.content,
+                        id: blog.id,
+                      })
+                    }}
+                    className="ml-2 py-2 px-8 text-white font-bold text-md bg-green-700 hover:bg-green-600 border rounded-full transition-smooth duration-200">
+                    Edit Post
+                  </button>
+                </Link>
+                <div>
+                  <button 
+                    onClick={onDelete}
+                    className="px-8 py-2 text-slate-50 font-bold text-md rounded-full bg-red-600 cursor-pointer hover:bg-red-500 transition-smoot duration-200">
+                      Delete
+                  </button>
+                </div>
+              </div>
+              : null}
           </div>
         </div>
 
@@ -70,14 +101,14 @@ const Blog = () => {
               <div className="flex w-10 h-10 flex-col justify-center items-center mr-2 px-5">
                 <Avatar size={10} username={blog.author.name || "Anonymous"} />
               </div>
-              
+
               <div className="font-bold text-2xl">{blog.author.name || "Anonymous"}</div>
 
             </div>
-              <div className="flex items-center justify-start">
-                {/* Description of the author */}
-                <div className="py-3 text-slate-400">{blog.author.description}</div>
-              </div>
+            <div className="flex items-center justify-start">
+              {/* Description of the author */}
+              <div className="py-3 text-slate-400">{blog.author.description}</div>
+            </div>
           </div>
         </div>
       </div>

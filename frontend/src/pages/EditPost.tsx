@@ -1,4 +1,4 @@
-import {   useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { BACKEND_URL } from "../../config"
 import Appbar from "../components/Appbar"
 import axios from "axios"
@@ -8,7 +8,7 @@ import { editBlogAtom } from "../recoil/atom/blogDetailsAtom"
 import TextEditor from "../components/TextEditor"
 import { toast } from "react-toastify"
 
-export const CreatePost = () => {
+export const EditPost = () => {
     const navigate = useNavigate();
     const useBlogValue = useRecoilValue(editBlogAtom)
     const [loading, setLoading] = useState(false)
@@ -17,18 +17,34 @@ export const CreatePost = () => {
         content: useBlogValue.content,
         id: useBlogValue.id
     })
+
+    useEffect(() => {
+        setBlogData({
+            title: useBlogValue.title,
+            content: useBlogValue.content,
+            id: useBlogValue.id
+        })
+        console.log(useBlogValue);
+        console.log(blogData);
+
+    }, [useBlogValue])
+    // console.log(useBlogValue);
+    // console.log(blogData);
+
+
     const [titleError, setTitleError] = useState(false);
     const [contentError, setContentError] = useState(false);
 
     const sendBlogData = async () => {
         try {
-            if(blogData.title && blogData.title.trim()!='') {
-                if(blogData.content && blogData.content.trim() != '') {
-                    setLoading(true)
+            if (blogData.title && blogData.title.trim() != '') {
+                if (blogData.content && blogData.content.trim() != '') {
+                    console.log(blogData);
                     
+                    setLoading(true)
                     const date = new Date();
-            
-                    const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
+
+                    const response = await axios.put(`${BACKEND_URL}/api/v1/blog/${useBlogValue.id}`, {
                         ...blogData,
                         date,
                         published: true
@@ -37,7 +53,7 @@ export const CreatePost = () => {
                             Authorization: localStorage.getItem("token")
                         }
                     })
-            
+
                     const id = response.data.id;
                     setLoading(false);
                     setTitleError(false);
@@ -49,8 +65,10 @@ export const CreatePost = () => {
                 }
             } else {
                 setTitleError(true)
-            } 
+            }
         } catch (error) {
+            console.log(error);
+            
             toast.error("Please fill in the required details!", {
                 position: "top-right",
                 autoClose: 5000,
@@ -63,7 +81,7 @@ export const CreatePost = () => {
             })
         }
     }
-    
+
 
     return (
         <div className="h-screen w-screen relative z-0">
@@ -79,7 +97,7 @@ export const CreatePost = () => {
                 <div className="max-w-screen-lg w-full flex flex-col items-center justify-center">
 
                     <div className="mt-6 w-full font-semibold font-serif text-3xl flex justify-start items-start">
-                        Create New Blog
+                        Edit Blog
                     </div>
 
                     <div className="my-8 w-full">
@@ -89,15 +107,15 @@ export const CreatePost = () => {
                         </div>
                         {/* <div>{blogData.title + " " + blogData.content}</div>
                         <div>{useBlogValue.title + " " + useBlogValue.content}</div> */}
-                        <input 
-                            type="text" 
-                            // value={useBlogValue.title || ''} 
+                        <input
+                            type="text"
+                            value={useBlogValue.title || ''} 
                             onChange={(e) => {
                                 setBlogData({
                                     ...blogData,
                                     title: e.target.value
                                 })
-                            }} 
+                            }}
                             className="focus:outline-blue-300 bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Title" />
                     </div>
 
@@ -106,7 +124,7 @@ export const CreatePost = () => {
                             <label className="text-lg py-3 font-bold font-serif uppercase">Content</label>
                             {contentError ? <div className="text-lg py-2 items-center text-red-500 font-semibold">*Content is required</div> : null}
                         </div>
-                        <TextEditor setBlogData={setBlogData} blogData={blogData}/>
+                        <TextEditor setBlogData={setBlogData} blogData={blogData} />
                     </div>
 
                     <div className="mt-6 w-full flex flex-row items-center justify-center gap-5">
@@ -122,7 +140,7 @@ export const CreatePost = () => {
                                 "w-[50%] py-3 bg-blue-600  text-slate-50 rounded-lg cursor-not-allowed text-lg font-bold hover:bg-blue-500 transition-smooth duration-200"
                                 :
                                 "w-[50%] py-3 bg-blue-600  text-slate-50 rounded-lg cursor-pointer text-lg font-bold hover:bg-blue-500 transition-smooth duration-200"}>
-                            Post
+                            Update Post
                         </button>
                     </div>
 

@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@manakhare/common-module": "^1.0.1",
+    "@manakhare/common-module": "^1.1.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@tinymce/tinymce-react": "^5.1.1",
     "axios": "^1.7.5",

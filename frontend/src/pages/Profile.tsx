@@ -31,6 +31,9 @@ const Profile = () => {
       setUsername(profileData.name);
       // setEmail(profileData.email);
       setDescription(profileData.description);
+      const user = JSON.parse(localStorage.getItem("user") || "Anonymous");
+      user.description = description;
+      localStorage.setItem("user", JSON.stringify(user));
 
       toast.success('Profile updated!', {
         position: "top-right",

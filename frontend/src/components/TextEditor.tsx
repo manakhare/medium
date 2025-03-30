@@ -7,10 +7,12 @@ export default function TextEditor({blogData, setBlogData}: {
     blogData: {
         title: string;
         content: string;
+        id: string;
     },
     setBlogData: React.Dispatch<React.SetStateAction<{
         title: string;
         content: string;
+        id: string;
     }>>
 }) {
     // const [editorValue, setEditorValue] = useState<string>('');

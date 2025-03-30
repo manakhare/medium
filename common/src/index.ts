@@ -1,4 +1,4 @@
-import z from "zod";
+import {date, z} from "zod";
 
 export const signupInput = z.object({
     email: z.string().email(),
@@ -20,7 +20,12 @@ export const createBlogInput = z.object({
 export const updateBlogInput = z.object({
     authorId: z.string(),
     title: z.string(),
-    content: z.string()
+    content: z.string(),
+    id: z.string().optional(),
+    date: z.string().optional(),
+    published: z.boolean().optional(),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
 })
 
 

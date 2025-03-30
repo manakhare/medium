@@ -3,6 +3,7 @@ import { withAccelerate } from '@prisma/extension-accelerate';
 import { verify, decode } from 'hono/jwt'
 import { Hono } from 'hono'
 import { createBlogInput, updateBlogInput } from '@manakhare/common-module';
+import { commonUpdateBlogInput } from '../types';
 
 export const blogRouter = new Hono<{
     Bindings: {
@@ -83,44 +84,7 @@ blogRouter.post('/', async (c) => {
 })
 
 
-blogRouter.put('/', async (c) => {
-    const body = await c.req.json();
-    // const name = c.get('userName');
-    // const email = c.get("userEmail");
 
-    const { success } = updateBlogInput.safeParse(body);
-    if (!success) {
-        c.status(411);
-        c.json({ message: "Incorrect inputs" })
-    }
-
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL
-    }).$extends(withAccelerate());
-
-    try {
-        const blog = await prisma.post.update({
-            where: {
-                id: body.id
-            },
-            data: {
-                title: body.title,
-                content: body.content
-            }
-        });
-
-        return c.json({
-            id: blog.id,
-            date: blog.date,
-            // email: email,
-            // name: name
-        });
-
-    } catch (e) {
-        c.status(411);
-        return c.json({ message: "Incorrect inputs" })
-    }
-})
 
 blogRouter.get('/my-posts', async (c) => {
     const id = c.get('userId');
@@ -218,6 +182,77 @@ blogRouter.get('/:id', async (c) => {
     } catch (e) {
         c.status(404);
         return c.json({ message: 'blog not found' });
+    }
+})
+
+blogRouter.delete('/:id', async (c) => {
+    const blogId = c.req.param("id");
+    const authId = c.get("userId");
+
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try {
+        const blog = await prisma.post.delete({
+            where: {
+                id: blogId,
+                authorId: authId
+            }
+        })
+        return c.json({ message: "Deleted successfully" })
+    } catch (e) {
+        c.status(404);
+        return c.json({ message: 'blog not found' });
+    }
+}
+)
+   
+
+blogRouter.put('/:id', async (c) => {
+    const body = await c.req.json();
+    const blogId = c.req.param("id");
+    const authId = c.get("userId");
+    // const name = c.get('userName');
+    // const email = c.get("userEmail");
+    
+
+    const { success, error } = commonUpdateBlogInput.safeParse(body);
+    if (!success) {
+        console.log(error);
+        console.log("Invalid inputs");
+        console.log(body);
+        
+        c.status(411);
+        return c.json({ message: "Incorrect inputs" })
+    }
+
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL
+    }).$extends(withAccelerate());
+
+    try {
+        const blog = await prisma.post.update({
+            where: {
+                id: blogId
+            },
+            data: {
+                title: body.title,
+                content: body.content
+            }
+        });
+
+        return c.json({
+            id: blog.id,
+            date: blog.date,
+            // email: email,
+            // name: name
+        });
+
+    } catch (e) {
+        console.log(e);
+        c.status(411);
+        return c.json({ message: "Incorrect inputs" })
     }
 })
 

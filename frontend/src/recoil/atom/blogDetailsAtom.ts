@@ -4,6 +4,7 @@ export const editBlogAtom = atom({
     key: "editBlog",
     default: {
         title: "",
-        content: ""
+        content: "",
+        id: "",
     }
 })

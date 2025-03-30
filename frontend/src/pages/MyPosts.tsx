@@ -46,7 +46,7 @@ export const MyPosts = () => {
               : <div className="px-3 py-5 font-light text-md">You have not posted anything yet!</div>}
           </div>
           <Link to="/blogs">
-              <div className="mx-3 px-6 py-2 bg-green-700 w-fit text-slate-50 font-bold rounded-md cursor-pointer hover:bg-green-600 transition-all duration-200">
+              <div className="mx-1 px-6 py-2 bg-green-700 w-fit text-slate-50 font-bold rounded-md cursor-pointer hover:bg-green-600 transition-all duration-200">
                 Go Back
               </div>
           </Link>
