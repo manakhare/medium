@@ -85,7 +85,6 @@ blogRouter.post('/', async (c) => {
 
 
 
-
 blogRouter.get('/my-posts', async (c) => {
     const id = c.get('userId');
 
@@ -213,16 +212,10 @@ blogRouter.put('/:id', async (c) => {
     const body = await c.req.json();
     const blogId = c.req.param("id");
     const authId = c.get("userId");
-    // const name = c.get('userName');
-    // const email = c.get("userEmail");
-    
 
     const { success, error } = commonUpdateBlogInput.safeParse(body);
+
     if (!success) {
-        console.log(error);
-        console.log("Invalid inputs");
-        console.log(body);
-        
         c.status(411);
         return c.json({ message: "Incorrect inputs" })
     }
@@ -250,7 +243,7 @@ blogRouter.put('/:id', async (c) => {
         });
 
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         c.status(411);
         return c.json({ message: "Incorrect inputs" })
     }

@@ -8,6 +8,7 @@ import { month } from "../constants";
 // import { useRecoilValue } from "recoil";
 import { useSetRecoilState } from "recoil";
 import { editBlogAtom } from "../recoil/atom/blogDetailsAtom";
+import { BACKEND_URL } from "../../config";
 
 
 const Blog = () => {
@@ -20,12 +21,11 @@ const Blog = () => {
 
   const { id } = useParams();
   const { loading, blog } = useBlog({ id: id || "" })
-  console.log(blog);
   
 
   const onDelete = async () => {
     try {
-      const res = await fetch(`http://localhost:8787/api/v1/blog/${id}`, {
+      const res = await fetch(`${BACKEND_URL}/api/v1/blog/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: localStorage.getItem("token") || ""
@@ -35,7 +35,7 @@ const Blog = () => {
         navigate("/blogs");
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
   if (loading || !blog) {

@@ -51,7 +51,7 @@ export const CreatePost = () => {
                 setTitleError(true)
             } 
         } catch (error) {
-            toast.error("Please fill in the required details!", {
+            toast.error("Something went wrong!", {
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,

@@ -24,12 +24,7 @@ export const EditPost = () => {
             content: useBlogValue.content,
             id: useBlogValue.id
         })
-        console.log(useBlogValue);
-        console.log(blogData);
-
     }, [useBlogValue])
-    // console.log(useBlogValue);
-    // console.log(blogData);
 
 
     const [titleError, setTitleError] = useState(false);
@@ -39,8 +34,6 @@ export const EditPost = () => {
         try {
             if (blogData.title && blogData.title.trim() != '') {
                 if (blogData.content && blogData.content.trim() != '') {
-                    console.log(blogData);
-                    
                     setLoading(true)
                     const date = new Date();
 
@@ -67,7 +60,7 @@ export const EditPost = () => {
                 setTitleError(true)
             }
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             
             toast.error("Please fill in the required details!", {
                 position: "top-right",
