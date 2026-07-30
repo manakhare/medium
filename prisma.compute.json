@@ -1,0 +1,13 @@
+{
+  "app": {
+    "name": "backend",
+    "root": "backend",
+    "framework": "hono",
+    "entry": "src/index.ts",
+    "httpPort": 3000,
+    "build": {
+      "command": null,
+      "outputDirectory": "."
+    }
+  }
+}
